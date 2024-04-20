@@ -1,47 +1,47 @@
-async function generateHash(data) {
-    const encoder = new TextEncoder();
-    const dataBuffer = encoder.encode(data);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
-}
-
-document.getElementById('addForm').addEventListener('submit', async function(event) {
+document.getElementById('registerForm').addEventListener('submit', async function(event) {
     event.preventDefault();
-    const login = document.getElementById('loginInput').value;
-    const publicKey = document.getElementById('publicKeyHashInput').value;
-
-    // Генерация хеша от публичного ключа
-    const publicKeyHash = await generateHash(publicKey);
+    const login = document.getElementById('registerInput').value;
+    const publicKey = document.getElementById('publicKeyInput').value;
 
     fetch('/addRecord', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ login, publicKeyHash })
+        body: JSON.stringify({ login, publicKey })
     })
     .then(response => response.json())
     .then(data => {
         document.getElementById('responseArea').innerText = 'Ответ сервера: ' + JSON.stringify(data);
-        document.getElementById('loginInput').value = ''; // Очищаем поля после отправки
-        document.getElementById('publicKeyHashInput').value = ''; 
+        document.getElementById('registerInput').value = ''; // Очищаем поля после отправки
+        document.getElementById('publicKeyInput').value = ''; 
     })
     .catch(error => console.error('Ошибка:', error));
 });
 
-document.getElementById('checkForm').addEventListener('submit', async function(event) {
+function cryptData(data, privateKey) {
+    return data;
+}
+
+document.getElementById('loginForm').addEventListener('submit', async function(event) {
     event.preventDefault();
-    const login = document.getElementById('loginCheckInput').value;
-    const publicKey = document.getElementById('publicKeyHashCheckInput').value;
-    const publicKeyHash = await generateHash(publicKey);
-    fetch(`/checkRecord?login=${login}&publicKeyHash=${publicKeyHash}`, {
+    const login = document.getElementById('loginInput').value;
+    const privateKey = document.getElementById('privateKeyInput').value;
+    fetch(`/loginStart?login=${login}`, {
         method: 'GET'
     })
     .then(response => response.json())
     .then(data => {
-        document.getElementById('responseArea').innerText = 'Ответ сервера: ' + JSON.stringify(data);
+        randomData = data["data"];
+        console.log(randomData);
+        const cryptedData = cryptData(randomData, privateKey);
+        fetch(`/loginEnd?login=${login}&cryptedData=${cryptedData}`, {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('responseArea').innerText = 'Ответ сервера: ' + JSON.stringify(data);
+        })
     })
     .catch(error => console.error('Ошибка:', error));
 });

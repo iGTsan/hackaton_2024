@@ -8,18 +8,18 @@
 <body>
     <h1>DB Records Manager</h1>
 
-    <h2>Добавить запись</h2>
-    <form id="addForm">
-        <input type="text" id="loginInput" placeholder="Введите логин" required>
-        <input type="text" id="publicKeyHashInput" placeholder="Введите публичный ключ" required>
-        <button type="submit">Добавить</button>
+    <h2>Регистрация</h2>
+    <form id="registerForm">
+        <input type="text" id="registerInput" placeholder="Введите логин" required>
+        <input type="text" id="publicKeyInput" placeholder="Введите публичный ключ" required>
+        <button type="submit">Регистрация</button>
     </form>
 
-    <h2>Проверить запись по логину</h2>
-    <form id="checkForm">
-        <input type="text" id="loginCheckInput" placeholder="Введите логин" required>
-        <input type="text" id="publicKeyHashCheckInput" placeholder="Введите публичный ключ" required>
-        <button type="submit">Проверить</button>
+    <h2>Вход</h2>
+    <form id="loginForm">
+        <input type="text" id="loginInput" placeholder="Введите логин" required>
+        <input type="text" id="privateKeyInput" placeholder="Введите приватный ключ" required>
+        <button type="submit">Вход</button>
     </form>
 
     <div id="responseArea"></div>

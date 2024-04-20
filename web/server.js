@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path'); // Добавляем модуль path для работы с путями файлов
+const my_crypto = require('./crypto');
 
 const app = express();
 const port = 3000;
@@ -18,27 +19,27 @@ const db = new sqlite3.Database('./mydatabase.db', (err) => {
 });
 
 // Создание таблицы если ее нет
-db.run('CREATE TABLE IF NOT EXISTS records (login TEXT PRIMARY KEY, public_key_hash TEXT)');
+db.run('CREATE TABLE IF NOT EXISTS records (login TEXT PRIMARY KEY, public_key TEXT)');
 
 // Запись данных в БД
 app.post('/addRecord', (req, res) => {
-    const { login, publicKeyHash } = req.body;
-    const sql = 'INSERT INTO records (login, public_key_hash) VALUES (?, ?)';
-    db.run(sql, [login, publicKeyHash], (err) => {
+    const { login, publicKey } = req.body;
+    const sql = 'INSERT INTO records (login, public_key) VALUES (?, ?)';
+    db.run(sql, [login, publicKey], (err) => {
         if (err) {
             res.status(500).send({error: err.message});
             return console.error(err.message);
         }
-        res.send({message: 'Запись добавлена login: ' + login + ' publicKeyHash: ' + publicKeyHash});
+        res.send({message: 'Запись добавлена login: ' + login + ' publicKey: ' + publicKey});
     });
 });
 
 // Проверка записи в БД
 app.get('/checkRecord', (req, res) => {
     const { login } = req.query;
-    const { publicKeyHash } = req.query;
-    const sql = 'SELECT * FROM records WHERE login = ? AND public_key_hash = ?';
-    db.get(sql, [login, publicKeyHash], (err, row) => {
+    const { publicKey } = req.query;
+    const sql = 'SELECT * FROM records WHERE login = ? AND public_key = ?';
+    db.get(sql, [login, publicKey], (err, row) => {
         if (err) {
             res.status(500).send({error: err.message});
             return console.error(err.message);
@@ -46,7 +47,47 @@ app.get('/checkRecord', (req, res) => {
         if (row) {
             res.send({found: true, data: row});
         } else {
-            res.send({message: 'Запись не найдена login: ' + login + ' publicKeyHash: ' + publicKeyHash});
+            res.send({message: 'Запись не найдена login: ' + login + ' publicKeyHash: ' + publicKey});
+        }
+    });
+});
+
+
+// Проверка записи в БД
+app.get('/loginStart', (req, res) => {
+    const { login } = req.query;
+    const sql = 'SELECT * FROM records WHERE login = ?';
+    db.get(sql, [login], (err, row) => {
+        if (err) {
+            res.status(500).send({error: err.message});
+            return console.error(err.message);
+        }
+        if (row) {
+            console.log(row.public_key, login);
+            const randomData = my_crypto.GetDataForAuth(login, row.public_key);
+            res.send({found: true, data: randomData});
+        } else {
+            res.send({message: 'Запись не найдена login: ' + login});
+        }
+    });
+});
+
+
+// Проверка записи в БД
+app.get('/loginEnd', (req, res) => {
+    const { login } = req.query;
+    const { cryptedData } = req.query;
+    const sql = 'SELECT * FROM records WHERE login = ?';
+    db.get(sql, [login], (err, row) => {
+        if (err) {
+            res.status(500).send({error: err.message});
+            return console.error(err.message);
+        }
+        if (row) {
+            const loginStatus = my_crypto.ValidateDataForAuth(login, row.public_key, cryptedData)
+            res.send({found: true, data: loginStatus});
+        } else {
+            res.send({message: 'Запись не найдена login: ' + login});
         }
     });
 });
