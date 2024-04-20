@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DB Records Manager</title>
+</head>
+<body>
+    <h1>DB Records Manager</h1>
+
+    <h2>Добавить запись</h2>
+    <form id="addForm">
+        <input type="text" id="loginInput" placeholder="Введите логин" required>
+        <input type="text" id="publicKeyHashInput" placeholder="Введите публичный ключ" required>
+        <button type="submit">Добавить</button>
+    </form>
+
+    <h2>Проверить запись по логину</h2>
+    <form id="checkForm">
+        <input type="text" id="loginCheckInput" placeholder="Введите логин" required>
+        <input type="text" id="publicKeyHashCheckInput" placeholder="Введите публичный ключ" required>
+        <button type="submit">Проверить</button>
+    </form>
+
+    <div id="responseArea"></div>
+
+    <script src="requests.js"></script>
+</body>
+</html>
