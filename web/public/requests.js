@@ -66,7 +66,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     const reader = new FileReader();
 
     reader.onload = async function(e) {
-        const allText = e.target.result; // Считываем содержимое файла
+        const allText = await unwrapper(e.target.result, password); // Считываем содержимое файла
         const jsonObjects = allText.split('\n'); // Разделяем содержимое файла по переносам строк
         if (jsonObjects.length < 2) {
             alert("Файл должен содержать как минимум два JSON объекта.");
@@ -138,6 +138,7 @@ try {
 document.getElementById('loginForm').addEventListener('submit', async function(event) {
     event.preventDefault();
     const login = document.getElementById('loginInput').value;
+    const password = document.getElementById('loginInputPassword').value;
     const file = document.getElementById('loginFileInput').files[0];
 
     if (!file) {
@@ -149,7 +150,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     const reader = new FileReader();
 
     reader.onload = async function(e) {
-        const allText = e.target.result; // Считываем содержимое файла
+        const allText = await unwrapper(e.target.result, password); // Считываем содержимое файла
         const jsonObjects = allText.split('\n'); // Разделяем содержимое файла по переносам строк
         if (jsonObjects.length < 2) {
             alert("Файл должен содержать как минимум два JSON объекта.");
@@ -203,8 +204,12 @@ function genKeyPair() {
 }
 
 async function createAndDownloadFile() {
+  const password = document.getElementById('createKeysInputPassword').value;
   const fileName = document.getElementById('fileName').value;
-  const content = await genKeyPair();
+  const contentPure = await genKeyPair();
+  const content = await wrapper(contentPure, password);
+  console.log(content);
+  console.log(await unwrapper(content, password));
   const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
 
   if (window.navigator.msSaveOrOpenBlob) {

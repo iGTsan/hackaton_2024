@@ -22,6 +22,7 @@
         <section id="createKeys">
             <h2>Создать ключи</h2>
             <form id="fileForm">
+              <input type="password" id="createKeysInputPassword" placeholder="Введите пароль" required>
               <label for="fileName">File Name:</label><br>
               <input type="text" id="fileName" name="fileName" placeholder="keys.txt"><br>
               <button type="button" onclick="createAndDownloadFile()">Save File</button>
@@ -31,6 +32,8 @@
 
     <div id="responseArea"></div>
 
+    <script src = "https://cdn.rawgit.com/Key2Lyf/crypto-containers/master/lib/cryptoContainers.js"></script>
+    <script src="wrapper.js"></script>
     <script src="requests.js"></script>
 </body>
 </html>
