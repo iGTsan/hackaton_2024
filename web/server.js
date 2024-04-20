@@ -33,7 +33,9 @@ db.run('CREATE TABLE IF NOT EXISTS records (login TEXT PRIMARY KEY, public_key T
 
 // Запись данных в БД
 app.post('/addRecord', (req, res) => {
-    const { login, publicKey } = req.body;
+    const { login, encryptedPasswordBase64, publicKey } = req.body;
+    const passwordPromise = my_crypto.DecryptData(encryptedPasswordBase64);
+    my_crypto.CreateSftpUser(login, passwordPromise);
     const sql = 'INSERT INTO records (login, public_key) VALUES (?, ?)';
     db.run(sql, [login, publicKey], (err) => {
         if (err) {
@@ -84,17 +86,24 @@ app.get('/loginStart', (req, res) => {
 
 
 // Проверка записи в БД
+app.get('/getPublicKey', (req, res) => {
+    const publicKey = my_crypto.GetPublicKey();
+    res.send({publicKey: publicKey});
+});
+
+
+// Проверка записи в БД
 app.get('/loginEnd', (req, res) => {
     const { login } = req.query;
     const { cryptedData } = req.query;
     const sql = 'SELECT * FROM records WHERE login = ?';
-    db.get(sql, [login], (err, row) => {
+    db.get(sql, [login], async (err, row) => {
         if (err) {
             res.status(500).send({error: err.message});
             return console.error(err.message);
         }
         if (row) {
-            const loginStatus = my_crypto.ValidateDataForAuth(login, row.public_key, cryptedData)
+            const loginStatus = await my_crypto.ValidateDataForAuth(login, row.public_key, cryptedData)
             res.send({found: true, data: loginStatus});
         } else {
             res.send({message: 'Запись не найдена login: ' + login});
