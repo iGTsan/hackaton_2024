@@ -11,14 +11,14 @@
     <h2>Регистрация</h2>
     <form id="registerForm">
         <input type="text" id="registerInput" placeholder="Введите логин" required>
-        <input type="text" id="publicKeyInput" placeholder="Введите публичный ключ" required>
+        <input type="file" id="registerFileInput" accept=".txt" required>
         <button type="submit">Регистрация</button>
     </form>
 
     <h2>Вход</h2>
     <form id="loginForm">
         <input type="text" id="loginInput" placeholder="Введите логин" required>
-        <input type="text" id="privateKeyInput" placeholder="Введите приватный ключ" required>
+        <input type="file" id="loginFileInput" accept=".txt" required>
         <button type="submit">Вход</button>
     </form>
 
