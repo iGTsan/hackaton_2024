@@ -1,14 +1,24 @@
 const express = require('express');
+const https = require('https');
+const fs = require('fs');
 const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path'); // Добавляем модуль path для работы с путями файлов
 const my_crypto = require('./crypto');
+
+const options = {
+  key: fs.readFileSync('./key.pem'),
+  cert: fs.readFileSync('./cert.pem'),
+  passphrase: '1234'
+};
 
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
 app.use(express.static('public')); // Предоставляем статические файлы из папки 'public'
+
+const httpsServer = https.createServer(options, app);
 
 // Подключение к БД SQLite
 const db = new sqlite3.Database('./mydatabase.db', (err) => {
@@ -97,8 +107,8 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html')); // Убедитесь, что путь корректен
 });
 
-app.listen(port, () => {
-    console.log(`Сервер запущен на http://localhost:${port}`);
+httpsServer.listen(port, () => {
+  console.log(`Сервер запущен на https://localhost:${port}`);
 });
 
 // Закрытие базы данных при завершении работы сервера
