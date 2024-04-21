@@ -48,3 +48,28 @@ nav ul li a {
 nav ul li a:hover {
     background-color: #f0f0f0;
 }
+
+input[type="submit"] {
+    background-color: #0096FF;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+input[type="text"],
+        input[type="password"],
+        input[type="file"],
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 12;
+
+}
