@@ -104,7 +104,6 @@ app.get('/getPublicKey', (req, res) => {
 // Обрабатываем POST-запрос для загрузки файла
 app.post('/upload', upload.single('file'), async (req, res) => {
     const password = await my_crypto.DecryptData(req.body.password);
-    console.log(password);
     const auth = await checkUser(req.body.username, password);
     if (!auth) {
         res.status(403).send('Auth failed');

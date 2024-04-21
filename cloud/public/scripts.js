@@ -50,11 +50,25 @@ function bufferToBase64(buffer) {
     return window.btoa(binary);
 }
 
+async function hashData(data) {
+    const encoder = new TextEncoder();
+    const dataBuffer = encoder.encode(data);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
+    return bufferToHex(hashBuffer);
+}
+
+function bufferToHex(buffer) {
+    return Array.from(new Uint8Array(buffer))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+}
+
 async function uploadFormData() {
     var formData = new FormData();
 
     var usernameInput = document.getElementById('username');
     var passwordInput = document.getElementById('password');
+    const passwordHash = await hashData(passwordInput.value);
     var fileInput = document.getElementById('file');
 
     const publicKeyResponse = await fetch(`/getPublicKey`, {
@@ -64,7 +78,7 @@ async function uploadFormData() {
     // console.log(publicKeyJson);
     const publicKey = publicKeyJson['publicKey'];
     // console.log(publicKey, password);
-    const encryptedPassword = await encryptData(passwordInput.value, publicKey);
+    const encryptedPassword = await encryptData(passwordHash, publicKey);
     const encryptedPasswordBase64 = bufferToBase64(encryptedPassword);
 
     formData.append('username', usernameInput.value);
