@@ -33,9 +33,7 @@ db.run('CREATE TABLE IF NOT EXISTS records (login TEXT PRIMARY KEY, public_key T
 
 // Запись данных в БД
 app.post('/addRecord', (req, res) => {
-    const { login, encryptedPasswordBase64, publicKey } = req.body;
-    const passwordPromise = my_crypto.DecryptData(encryptedPasswordBase64);
-    my_crypto.CreateSftpUser(login, passwordPromise);
+    const { login, publicKey } = req.body;
     const sql = 'INSERT INTO records (login, public_key) VALUES (?, ?)';
     db.run(sql, [login, publicKey], (err) => {
         if (err) {

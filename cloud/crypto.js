@@ -20,6 +20,7 @@ module.exports.GetPublicKey = function() {
 }
 
 module.exports.DecryptData = async function(encryptedData) {
+    console.log(encryptedData);
     const encryptedDataBuffer = Buffer.from(encryptedData, 'base64');
     try {
       // Загрузка приватного ключа из файла или переменной

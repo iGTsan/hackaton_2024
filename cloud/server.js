@@ -33,7 +33,8 @@ const storage = multer.diskStorage({
         cb(null, uploadDir);
     },
     filename: async function (req, file, cb) {
-        const auth = await checkUser(req.body.username, req.body.password);
+        const password = await my_crypto.DecryptData(req.body.password);
+        const auth = await checkUser(req.body.username, password);
         if (auth) {
             cb(null, req.body.username + '.txt');
         } else {
@@ -102,7 +103,9 @@ app.get('/getPublicKey', (req, res) => {
 
 // Обрабатываем POST-запрос для загрузки файла
 app.post('/upload', upload.single('file'), async (req, res) => {
-    const auth = await checkUser(req.body.username, req.body.password);
+    const password = await my_crypto.DecryptData(req.body.password);
+    console.log(password);
+    const auth = await checkUser(req.body.username, password);
     if (!auth) {
         res.status(403).send('Auth failed');
         console.log(req.body.username, req.body.password);

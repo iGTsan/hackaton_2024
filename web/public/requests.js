@@ -1,44 +1,3 @@
-function convertPemToBinary(pem) {
-    let b64Lines = pem.replace('-----BEGIN PUBLIC KEY-----', '').replace('-----END PUBLIC KEY-----', '').replace(/\r?\n|\r/g, '');
-    let binaryDerString = atob(b64Lines);
-    let binaryDer = new Uint8Array(binaryDerString.length);
-    for (let i = 0; i < binaryDerString.length; i++) {
-      binaryDer[i] = binaryDerString.charCodeAt(i);
-    }
-    return binaryDer;
-  }
-
-async function encryptData(data, publicKey) {
-    const binaryKey = await window.crypto.subtle.importKey(
-        'spki', 
-        convertPemToBinary(publicKey),
-        {
-            name: 'RSA-OAEP',
-            hash: {name: 'SHA-256'}
-        },
-        true,
-        ['encrypt']
-    );
-    let enc = new TextEncoder();
-    let encodedMessage = enc.encode(data);
-    return await window.crypto.subtle.encrypt(
-        {
-            name: 'RSA-OAEP'
-        },
-        binaryKey,
-        encodedMessage
-    );
-}
-
-function bufferToBase64(buffer) {
-    let binary = '';
-    const bytes = new Uint8Array(buffer);
-    const len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-        binary += String.fromCharCode(bytes[i]);
-    }
-    return window.btoa(binary);
-}
 
 try {
 document.getElementById('registerForm').addEventListener('submit', async function(event) {
@@ -52,17 +11,6 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         return;
     }
 
-    const publicKeyResponse = await fetch(`/getPublicKey`, {
-        method: 'GET'
-    });
-    const publicKeyJson = await publicKeyResponse.json();
-    // console.log(publicKeyJson);
-    const publicKey = publicKeyJson['publicKey'];
-    // console.log(publicKey, password);
-    const encryptedPassword = await encryptData(password, publicKey);
-    const encryptedPasswordBase64 = bufferToBase64(encryptedPassword);
-    // console.log(encryptedPassword);
-
     const reader = new FileReader();
 
     reader.onload = async function(e) {
@@ -75,13 +23,12 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         const publicKey = jsonObjects[1];
 
         try {
-            console.log(encryptedPassword);
             const response = await fetch('/addRecord', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ login, encryptedPasswordBase64, publicKey})
+                body: JSON.stringify({ login, publicKey})
             });
 
             const data = await response.json();

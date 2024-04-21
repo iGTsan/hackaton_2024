@@ -64,11 +64,11 @@ async function uploadFormData() {
     // console.log(publicKeyJson);
     const publicKey = publicKeyJson['publicKey'];
     // console.log(publicKey, password);
-    const encryptedPassword = await encryptData(password, publicKey);
+    const encryptedPassword = await encryptData(passwordInput.value, publicKey);
     const encryptedPasswordBase64 = bufferToBase64(encryptedPassword);
 
     formData.append('username', usernameInput.value);
-    formData.append('password', passwordInput.value);
+    formData.append('password', encryptedPasswordBase64);
     formData.append('file', fileInput.files[0], );
 
     var xhr = new XMLHttpRequest();
