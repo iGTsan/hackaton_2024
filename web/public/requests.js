@@ -109,7 +109,11 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         .then(response => response.json())
         .then(async data => {
             randomData = data["data"];
-            console.log(randomData);
+            if (!randomData || randomData === undefined) {
+                alert("MISSION FAILED!!!!!");
+                return;
+            }   
+            console.log("randomData", randomData);
             const cryptedData = await cryptData(randomData, privateKey);
             console.log(cryptedData);
             fetch(`/loginEnd?login=${login}&cryptedData=${cryptedData}`, {
@@ -120,7 +124,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
                 document.getElementById('responseArea').innerText = 'Ответ сервера: ' + JSON.stringify(data);
                 if (data.data){
                     alert("GREAT SUCCESS!!!!!");
-                }else if(Object.hasOwn(data,'data')){
+                }else{
                     alert("MISSION FAILED!!!!!");
                 }
             })
