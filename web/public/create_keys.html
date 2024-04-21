@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DB Records Manager</title>
+    <title>stdpd</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -22,10 +22,9 @@
         <section id="createKeys">
             <h2>Создать ключи</h2>
             <form id="fileForm">
-              <input type="password" id="createKeysInputPassword" placeholder="Введите пароль" required>
               <label for="fileName">File Name:</label><br>
-              <input type="text" id="fileName" name="fileName" placeholder="keys.txt"><br>
-              <button type="button" onclick="createAndDownloadFile()">Save File</button>
+              <input type="text" id="fileName" name="fileName" placeholder="keys.txt"><br><input type="password" id="createKeysInputPassword" placeholder="Задайте пароль" required><br>
+                <button type="button" onclick="createAndDownloadFile()">Save File</button>
             </form>
         </section>
     </div>

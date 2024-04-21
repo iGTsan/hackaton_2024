@@ -35,7 +35,18 @@ nav ul li a {
 h1, h2 {
     color: #F9AA33;
 }
+#main-content {
+    background-color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px;
+}
 
+
+p {
+    font-size: 16px;
+    line-height: 1.5;
+}
 form {
     background-color: #222;
     padding: 20px;
@@ -46,8 +57,14 @@ form {
     display: flex;
     flex-direction: column;
 }
-
-input[type="text"], input[type="file"] {
+a {
+    color: #ff6633;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+input[type="text"], input[type="file"], input[type="password"] {
     padding: 8px;
     margin: 8px 0;
     border: 2px solid #555;

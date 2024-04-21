@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DB Records Manager</title>
+    <title>stdpd</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,45 +13,21 @@
             <ul>
                 <li><a href="/register.html">Регистрация</a></li>
                 <li><a href="/login.html">Вход</a></li>
-                <li><a href="/createKeys.html">Создать ключи</a></li>
+                <li><a href="/create_keys.html">Создать ключи</a></li>
             </ul>
         </nav>
     </header>
 
     <div id="main-content">
-        <section id="register">
-            <h2>Регистрация</h2>
-            <form id="registerForm">
-                <input type="text" id="registerInput" placeholder="Введите логин" required>
-                <input type="file" id="registerFileInput" accept=".txt" required>
-                <button type="submit">Регистрация</button>
-            </form>
-        </section>
-
-        <section id="login">
-            <h2>Вход</h2>
-            <form id="loginForm">
-                <input type="text" id="loginInput" placeholder="Введите логин" required>
-                <input type="file" id="loginFileInput" accept=".txt" required>
-                <button type="submit">Вход</button>
-            </form>
-        </section>
-
-        <section id="createKeys">
-            <h2>Создать ключи</h2>
-            <form id="fileForm">
-              <input type="password" id="createKeysInputPassword" placeholder="Введите пароль" required>
-              <label for="fileName">File Name:</label><br>
-              <input type="text" id="fileName" name="fileName" placeholder="keys.txt"><br>
-              <button type="button" onclick="createAndDownloadFile()">Save File</button>
-            </form>
-        </section>
+<h2>Здравствуйте!</h2>
+<p>Приветствуем Вас на веб-клиенте команды "stdpd"!</p>
+<p>Перед началом работы необходимо ознакомиться с навигацией выше:</p>
+        <p>Создать ключи: эта страница предназначена для генерации криптоконтейнера защищенного Вашей <s>биометрией</s> <i>паролем</i> с ключами аутенификации. Эти ключи необходимы для дальнейшей регистрации и аутенификации.</p>
+        <p>Регистрация: на этой странице Вы можете пройти регистрацию. <img src="https://san2.ru/smiles/hd-dark-skin/unknown.gif"  width="30" height=auto> Важно понимать, что нужно прикрепить криптоконтейнер полученый на странице Создать ключи и расшифровать его <s>биометрией</s> <i>паролем</i>.</p>
+        <p>Вход: здесь вы можете совершить вход по логину и контейнеру + <s>биометрия</s> <i>пароль</i>.</p>
+        <p>Также не забедьте посетить наше <a href="https://5.35.29.142:3001/">облачное хранилище</a> для синхронизации ключей</p>
     </div>
 
-    <div id="responseArea"></div>
 
-    <script src = "https://cdn.rawgit.com/Key2Lyf/crypto-containers/master/lib/cryptoContainers.js"></script>
-    <script src="wrapper.js"></script>
-    <script src="requests.js"></script>
 </body>
 </html>

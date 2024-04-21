@@ -1,4 +1,3 @@
-
 try {
 document.getElementById('registerForm').addEventListener('submit', async function(event) {
     event.preventDefault();
@@ -119,6 +118,11 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
             .then(response => response.json())
             .then(data => {
                 document.getElementById('responseArea').innerText = 'Ответ сервера: ' + JSON.stringify(data);
+                if (data.data){
+                    alert("GREAT SUCCESS!!!!!");
+                }else if(Object.hasOwn(data,'data')){
+                    alert("MISSION FAILED!!!!!");
+                }
             })
         })
         .catch(error => console.error('Ошибка:', error));
