@@ -113,6 +113,32 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     }
 });
 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.post('/download', (req, res) => {
+    const username = req.body.username;
+    
+    const password = req.body.password;
+    const filename = `${username}.txt`;
+    const filepath = path.join(uploadDir, filename);
+
+    // Проверка наличия файла и правильности пароля
+    // if (password !== '123') {
+    //     return res.status(401).send('Неверный пароль');
+    // }c
+
+    // Проверка существования файла
+    fs.access(filepath, fs.constants.F_OK, (err) => {
+        if (err) {
+            return res.status(404).send(err);
+        }
+
+        // Отправка файла пользователю
+        res.download(filepath, filename);
+    });
+});
+
+
 // Порт, на котором будет работать сервер
 const PORT = 3001;
 

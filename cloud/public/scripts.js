@@ -20,7 +20,7 @@ function convertPemToBinary(pem) {
 
 async function encryptData(data, publicKey) {
     const binaryKey = await window.crypto.subtle.importKey(
-        'spki', 
+        'spki',
         convertPemToBinary(publicKey),
         {
             name: 'RSA-OAEP',
@@ -85,6 +85,8 @@ async function uploadFormData() {
     formData.append('password', encryptedPasswordBase64);
     formData.append('file', fileInput.files[0], );
 
+    console.log(formData);
+
     var xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function() {
@@ -102,11 +104,64 @@ async function uploadFormData() {
 
     xhr.open('POST', '/upload', true);
 
+    console.log(formData.get('username'));
     xhr.send(formData);
 }
 
-document.querySelector('input[type="submit"]').addEventListener('click', function(event) {
+async function downloadFormData() {
+    var formData = new FormData();
+
+    var usernameInput = document.getElementById('username_d');
+    var passwordInput = document.getElementById('password_d');
+
+    formData.append('username', usernameInput.value);
+    formData.append('password', passwordInput.value);
+    console.log(usernameInput, passwordInput);
+    console.log(usernameInput.value, passwordInput.value);
+    console.log(formData.get('password'));
+    const username = usernameInput.value;
+    const password = passwordInput.value;
+    console.log(JSON.stringify({username, password}));
+// ZDES PROVERKA PAROLYAß
+    try {
+        const response = await fetch('/download', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({username, password})
+        });
+
+        if (!response.ok) {
+            throw new Error('Произошла ошибка при скачивании файла');
+        }
+
+        const blob = await response.blob();
+        const fileURL = window.URL.createObjectURL(blob);
+
+        const downloadLink = document.createElement('a');
+        downloadLink.href = fileURL;
+        downloadLink.setAttribute('download', `${usernameInput.value}.txt`);
+        downloadLink.style.display = 'none';
+        document.body.appendChild(downloadLink);
+
+        downloadLink.click();
+
+        window.URL.revokeObjectURL(fileURL);
+        document.body.removeChild(downloadLink);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+document.querySelector('input[value="Загрузить"]').addEventListener('click', function(event) {
     event.preventDefault();
 
     uploadFormData();
+});
+
+document.querySelector('input[value="Скачать"]').addEventListener('click', function(event) {
+    event.preventDefault();
+
+    downloadFormData();
 });
