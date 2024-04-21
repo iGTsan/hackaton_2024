@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>stdpdCloud</h1>
+    <nav>
+        <ul>
+            <li><a href="#upload-page" onclick="showUploadPage()">Загрузить файл</a></li>
+            <li><a href="#download-page" onclick="showDownloadPage()">Скачать файл</a></li>
+        </ul>
+    </nav>
+    <div class="server-info">
+        <p><strong>Имя сервера:</strong> Hack24 </p>
+        <p><strong>IP адрес:</strong> 5.35.29.142</p>
+        <p><strong>Статус сервера:</strong> Онлайн</p>
+    </div>
+
+    <div id="upload-page">
+        <h2>Загрузить файл</h2>
+        <label for="file">Выберите файл:</label><br>
+        <input type="file" id="file" name="file"><br><br>
+        <label for="username">Логин:</label><br>
+        <input type="text" id="username" name="username"><br><br>
+        <label for="password">Пароль:</label><br>
+        <input type="password" id="password" name="password"><br><br>
+        <input type="submit" value="Загрузить" name="submit">
+    </div>
+    
+    <div id="download-page" style="display: none;">
+        <h2>Скачать файл</h2>
+
+        <label for="username_d">Логин:</label><br>
+        <input type="text" id="username_d" name="username_d"><br><br>
+        <label for="password_d">Пароль:</label><br>
+        <input type="password" id="password_d" name="password_d"><br><br>
+        <input type="submit" value="Скачать" name="submit_d">
+    </div>
+</div>
+
+
+<script src="scripts.js"></script>
+
+</body>
+</html>
