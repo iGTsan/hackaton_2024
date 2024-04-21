@@ -11,13 +11,13 @@ function showDownloadPage() {
 function uploadFormData() {
     var formData = new FormData();
 
-    var fileInput = document.getElementById('file');
     var usernameInput = document.getElementById('username');
     var passwordInput = document.getElementById('password');
+    var fileInput = document.getElementById('file');
 
-    formData.append('file', fileInput.files[0], );
     formData.append('username', usernameInput.value);
     formData.append('password', passwordInput.value);
+    formData.append('file', fileInput.files[0], );
 
     var xhr = new XMLHttpRequest();
 
@@ -33,7 +33,7 @@ function uploadFormData() {
         }
     };
 
-    xhr.open('POST', 'http://5.35.29.142:3001/upload', true);
+    xhr.open('POST', '/upload', true);
 
     xhr.send(formData);
 }
